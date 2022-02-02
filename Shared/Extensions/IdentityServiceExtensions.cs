@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace API.Extensions
+namespace Shared.Extensions
 {
     public static class IdentityServiceExtensions
     {

@@ -1,4 +1,7 @@
-﻿using DAL.Data;
+﻿using AutoMapper;
+using BLL.Models;
+using BLL.Repository;
+using DAL.Data;
 using DAL.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -10,26 +13,29 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
-{
+{  /* [Authorize]*/
     public class UsersController : BaseApiController
     {
-        private readonly DataContext _context;
-        public UsersController(DataContext context)
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
+        public UsersController(IUserRepository userRepository, IMapper mapper)
         {
-            _context = context;
+            _userRepository = userRepository;
+            _mapper = mapper;
         }
-        [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers()
         {
-             return await _context.Users.ToListAsync();
+            var users = await _userRepository.GetUsersAsync();
+
+            var usersToReturn = _mapper.Map<IEnumerable<MemberDTO>>(users);
+            return Ok(usersToReturn);
 
         }
-        [Authorize]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AppUser>> GetUsers(Guid id)
+        [HttpGet("{username}")]
+        public async Task<ActionResult<MemberDTO>> GetUser(string username)
         {
-            return await _context.Users.FindAsync(id);
+            return await _userRepository.GetMemberAsynyc(username);
 
         }
     }
