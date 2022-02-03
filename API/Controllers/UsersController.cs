@@ -13,7 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
-{  /* [Authorize]*/
+{  [Authorize]
     public class UsersController : BaseApiController
     {
         private readonly IUserRepository _userRepository;
