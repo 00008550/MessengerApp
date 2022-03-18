@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class UsersController : BaseApiController
     {
         private readonly IUserRepository _userRepository;
@@ -58,7 +58,7 @@ namespace API.Controllers
         }
 
         [HttpPost("add-photo")]
-        public async Task<ActionResult<PhotoDTO>> AddPhoto([FromForm]IFormFile file)
+        public async Task<ActionResult<PhotoDTO>> AddPhoto(IFormFile file)
         {
             var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
 

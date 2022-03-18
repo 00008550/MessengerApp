@@ -25,7 +25,7 @@ import { FileUploadModule } from 'ng2-file-upload';
     ToastrModule,
     TabsModule,
     NgxGalleryModule,
-    FileUploadModule,
+    FileUploadModule
   ]
 })
 export class SharedModule { }
