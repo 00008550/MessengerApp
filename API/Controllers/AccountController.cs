@@ -1,4 +1,5 @@
-﻿using BLL.Models;
+﻿using AutoMapper;
+using BLL.Models;
 using BLL.Services.TokenService;
 using DAL.Data;
 using DAL.Entities;
@@ -16,29 +17,32 @@ namespace API.Controllers
     public class AccountController: BaseApiController
     {
         private readonly IJWTService _jwtService;
+        private readonly IMapper _mapper;
         private readonly DataContext _context;
-        public AccountController(DataContext context, IJWTService jwtService)
+        public AccountController(DataContext context, IJWTService jwtService, IMapper mapper)
         {
             _context = context;
             _jwtService = jwtService;
+            _mapper = mapper;
         }
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDTO)
         {
             if (await UserExists(registerDTO.Username)) return BadRequest("User name is taken");
+
+            var user = _mapper.Map<AppUser>(registerDTO);
             using var hmac = new HMACSHA512();
-            var user = new AppUser
-            {
-                UserName = registerDTO.Username.ToLower(),
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password)),
-                PasswordSalt = hmac.Key
-            };
+            user.UserName = registerDTO.Username.ToLower();
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDTO.Password));
+            user.PasswordSalt = hmac.Key;
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return new UserDTO
             {
                 Username = user.UserName,
-                Token = _jwtService.CreateToken(user)
+                Token = _jwtService.CreateToken(user),
+                KnownAs = user.KnownAs
             };
         }
         [HttpPost("login")]
@@ -61,7 +65,8 @@ namespace API.Controllers
             {
                 Username = user.UserName,
                 Token = _jwtService.CreateToken(user),
-                PhotoUrl = user.Photos.FirstOrDefault(x=>x.IsMain)?.Url
+                PhotoUrl = user.Photos.FirstOrDefault(x=>x.IsMain)?.Url,
+                KnownAs = user.KnownAs
             };
         }
         private async Task<bool> UserExists(string username)
