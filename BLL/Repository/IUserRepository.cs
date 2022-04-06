@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BLL.Services.Helpers;
 
 namespace BLL.Repository
 {
@@ -15,7 +16,7 @@ namespace BLL.Repository
         Task<IEnumerable<AppUser>> GetUsersAsync();
         Task<AppUser> GetUserByIdAsync(Guid id);
         Task<AppUser> GetUserByUsernameAsync(string username);
-        Task<IEnumerable<MemberDTO>> GetMembersAsync();
-        Task<MemberDTO> GetMemberAsynyc(string username);
+        Task<PagedList<MemberDTO>> GetMembersAsync(UserParams userParams);
+        Task<MemberDTO> GetMemberAsync(string username);
     }
 }

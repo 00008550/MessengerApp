@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BLL.Repository;
 using BLL.Services.PService;
+using BLL.Services.Helpers;
 
 namespace Shared.Extensions
 {
@@ -21,6 +22,7 @@ namespace Shared.Extensions
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
             services.AddScoped<IJWTService, JWTService>();
             services.AddScoped<IPhotoService, PhotoService>();
+            services.AddScoped<LogUserActivity>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
             services.AddDbContext<DataContext>(options =>
