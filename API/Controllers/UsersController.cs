@@ -34,6 +34,7 @@ namespace API.Controllers
             _photoService = photoService;
 
         }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MemberDTO>>> GetUsers([FromQuery]UserParams userParams)
         {
@@ -50,6 +51,7 @@ namespace API.Controllers
             return Ok(users);
 
         }
+  
         [HttpGet("{username}", Name ="GetUser")]
         public async Task<ActionResult<MemberDTO>> GetUser(string username)
         {

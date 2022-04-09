@@ -9,6 +9,6 @@ namespace BLL.Services.TokenService
 {
     public interface IJWTService
     {
-        string CreateToken(AppUser user);
+        Task<string> CreateToken(AppUser user);
     }
 }
