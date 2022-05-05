@@ -11,6 +11,12 @@ namespace BLL.Repository
 {
     public interface IMessageRepository
     {
+
+        void AddGroup(Group group);
+        void RemoveConnection(Connection conntection);
+        Task<Connection> GetConntection(string connectionId);
+        Task<Group> GetMessageGroup(string groupName);
+        Task<Group> GetGroupForConnection(string connectionId);
         void AddMessage(Message message);
         void DeleteMessage(Message message);
         Task<Message> GetMessage(Guid id);
