@@ -22,6 +22,5 @@ namespace BLL.Repository
         Task<Message> GetMessage(Guid id);
         Task<PagedList<MessageDTO>> GetMessagesForUser(MessageParams messageParams);
         Task<IEnumerable<MessageDTO>> GetMessageThread(string currentUsername, string recipientUsername);
-        Task<bool> SaveAllAsync();
     }
 }

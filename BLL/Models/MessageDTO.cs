@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace BLL.Models
@@ -17,6 +18,12 @@ namespace BLL.Models
         public string RecipientPhotoUrl { get; set; }
         public string Content { get; set; }
         public DateTime? DateRead { get; set; }
+
+        [JsonIgnore]
+        public bool SenderDeleted {get; set; }
+        
+        [JsonIgnore]
+        public bool RecipientDeleted {get; set; }
         public DateTime MessageSent { get; set; } = DateTime.Now;
     }
 }

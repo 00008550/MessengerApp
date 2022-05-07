@@ -12,5 +12,6 @@ namespace DAL.Entities
         public string PublicId { get; set; }
         public AppUser AppUser { get; set; }
         public Guid AppUserId { get; set; }
+        public bool IsApproved { get; set; }
     }
 }

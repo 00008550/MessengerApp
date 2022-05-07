@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -9,13 +10,14 @@ namespace DAL.Data
 {
     public class Seed
     {
-        public static async Task SeedUsers(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager) 
+        public static async Task SeedUsers(UserManager<AppUser> userManager, 
+            RoleManager<AppRole> roleManager)
         {
             if (await userManager.Users.AnyAsync()) return;
 
-            var userData = await System.IO.File.ReadAllTextAsync("UserSeedData.json");
+            var userData = await System.IO.File.ReadAllTextAsync("Data/UserSeedData.json");
             var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
-            if(users== null) return;
+            if (users == null) return;
 
             var roles = new List<AppRole>
             {
@@ -24,24 +26,25 @@ namespace DAL.Data
                 new AppRole{Name = "Moderator"},
             };
 
-            foreach(var role in roles)
+            foreach (var role in roles)
             {
                 await roleManager.CreateAsync(role);
             }
-
+            
             foreach (var user in users)
             {
-
+                user.Photos.First().IsApproved = true;
                 user.UserName = user.UserName.ToLower();
-
-
                 await userManager.CreateAsync(user, "password");
                 await userManager.AddToRoleAsync(user, "Member");
             }
-            var admin = new AppUser{
-                UserName="admin"
+
+            var admin = new AppUser
+            {
+                UserName = "admin"
             };
-            await userManager.CreateAsync(admin, "password");
+
+            await userManager.CreateAsync(admin, "Pa$$w0rd");
             await userManager.AddToRolesAsync(admin, new[] {"Admin", "Moderator"});
         }
     }
