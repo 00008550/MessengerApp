@@ -15,7 +15,7 @@ namespace DAL.Data
         {
             if (await userManager.Users.AnyAsync()) return;
 
-            var userData = await System.IO.File.ReadAllTextAsync("UserSeedData.json");
+            var userData = await System.IO.File.ReadAllTextAsync("wwwroot/assets/UserSeedData.Json");
             var users = JsonSerializer.Deserialize<List<AppUser>>(userData);
             if (users == null) return;
 
